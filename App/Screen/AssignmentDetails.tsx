@@ -154,7 +154,7 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
               size={20}
               color={Colors.black}
               style={{paddingHorizontal: 3}}
-              onPress={()=>{navigation.navigate('PartsList')}}
+              onPress={()=>{navigation.navigate('PartsListing', {data:assignmentData})}}
             />
             <Icon
               name="car"

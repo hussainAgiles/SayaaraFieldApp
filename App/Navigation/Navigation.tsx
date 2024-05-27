@@ -5,14 +5,16 @@ import AssignmentDetails from '../Screen/AssignmentDetails';
 import AssignmentDashboard from '../Screen/AssignmentDashboard';
 import VehicleDetails from '../Screen/VehicleDetails';
 import WorkAssignedForm from '../Screen/WorkAssignedForm';
-import PartsList from '../components/Parts/PartsList';
+import PartsListing from '../components/Parts/PartsListing';
+import PartsStockList from '../components/Parts/PartsStockList';
 
 export type RootStackParamList = {
   Root: undefined;
   Assignment: any;
   VehicleDetails: any;
   WorkAssignedForm: any;
-  PartsList:any
+  PartsStockList: any;
+  PartsListing:any
 };
 
 export default function Navigation() {
@@ -53,8 +55,14 @@ function RootNavigator() {
       />
 
       <Stack.Screen
-        name="PartsList"
-        component={PartsList}
+        name="PartsListing"
+        component={PartsListing}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="PartsStockList"
+        component={PartsStockList}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
