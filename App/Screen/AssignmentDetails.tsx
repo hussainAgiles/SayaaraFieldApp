@@ -28,6 +28,7 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
   // console.log("Recieved props === ",assignmentData)
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [workRecords, setWorkRecords] = useState([]);
+  const [checkoutData, setCheckoutData] = useState([]);
 
   // console.log("Record ===",WorkRecords);
 
@@ -56,6 +57,8 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
       console.error('Error fetching work records', error);
     }
   };
+
+  // console.log("Work Records",workRecords)
 
   const deleteRecord = async (index: number) => {
     Alert.alert(
@@ -87,8 +90,9 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
     );
   };
 
-  const editRecord = (record: any) => {
-    navigation.navigate('WorkAssignedForm', { mode: 'edit', record });
+  const editRecord = (data: any) => {
+    // console.log("Record ===",data?.item);
+    navigation.navigate('WorkAssignedForm', { mode: 'edit', id:data?.item});
   };
 
 
@@ -128,6 +132,13 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
         </View>
       </View>
     );
+  };
+
+  const handleUpdateStatus = (updatedItems:any) => {
+    // Update checkoutItems in parent component
+    setCheckoutData(updatedItems);
+    console.log("updatedItems === ",updatedItems)
+
   };
 
   return (
@@ -380,7 +391,7 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('WorkAssignedForm', {
-                  record: {item: assignmentData},
+                  record: {item: assignmentData}
                 });
               }}>
               <Icon name="plus" size={25} color={Colors.white} />

@@ -32,34 +32,42 @@ import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
 
-const WorkAssignedForm = ({route}:any) => {
-    const data = route?.params?.record?.item
-    // console.log("Console.log",data)
+interface records {
+  serviceId: number;
+  workType: string;
+  description: string;
+  imagePath: string;
+  status: string;
+}
+
+const WorkAssignedForm = ({route}: any) => {
+  const data = route?.params?.record?.item;
+
+  // const {onUpdateItems} = route?.params?.onUpdateItems;
+
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [description, setDescription] = useState(data?.description);
   const [selectedWork, setSelectedWork] = useState(data?.workType);
   const [images, setImages] = useState([]);
-  const [imageUrl, setImageUrl] = useState('');
-  const [existingRecordId, setExistingRecordId] = useState(data?.id);
-  const [clockStatus,setClockStatus] = useState('');
-  const { mode, record } = route.params;
-
+  const [clockStatus, setClockStatus] = useState('');
+  const [transfered,setTransfered] = useState('');
+  const {mode,id} = route.params;
 
   const workAssigned = [
     {
       id: 1,
       label: 'Diagnostics and Repairs',
-      value:'Diagnostics and Repairs',
+      value: 'Diagnostics and Repairs',
     },
     {
       id: 2,
       label: 'Tire Services',
-      value:'Tire Services',
+      value: 'Tire Services',
     },
     {
       id: 3,
       label: 'Brake Services',
-      value:'Brake Services',
+      value: 'Brake Services',
     },
     {
       id: 4,
@@ -83,11 +91,10 @@ const WorkAssignedForm = ({route}:any) => {
     },
   ];
 
-
   useEffect(() => {
-    if (mode === 'edit' && record) {
-      setSelectedWork(record.workType);
-      setDescription(record.description);
+    if (mode === 'edit' && id) {
+      setSelectedWork(id.workType);
+      setDescription(id.description);
     }
   }, []);
 
@@ -95,24 +102,40 @@ const WorkAssignedForm = ({route}:any) => {
     try {
       const newRecord = {
         serviceId: data?.service_number,
+        id:uuid.v4(),
         workType: selectedWork,
         description: description,
-        imagePath: images.map(image => image?.path),
+        imagePath: images.map((image) => image?.path),
         status: clockStatus === '' ? 'Clock In' : 'Clock Out',
       };
+      
       let records = await AsyncStorage.getItem('workRecords');
+      console.log("this is the recorss",records)
+  
       if (!records) {
-        records = JSON.stringify([newRecord]);
+        records = [newRecord]; // Wrap newRecord in an array if records is null
       } else {
         records = JSON.parse(records);
+  
         if (mode === 'edit') {
-          records[record.index] = newRecord;
+          // If editing, find the record by id and update it
+          const index = records.findIndex((record:any) => record.id === id.id);
+          if (index !== -1) {
+            records[index] = newRecord;
+          } else {
+            console.error('Record with id not found:', id);
+            return; // Exit function if record with id is not found
+          }
         } else {
+          // If not editing, simply push the new record
           records.push(newRecord);
         }
-        records = JSON.stringify(records);
       }
-      await AsyncStorage.setItem('workRecords', records);
+      onUpdateItems(newRecord)
+      // Save the updated records back to AsyncStorage
+      await AsyncStorage.setItem('workRecords', JSON.stringify(records));
+  
+      // Display success message and navigate back
       Toast.show({ type: 'success', text1: 'Record saved successfully' });
       navigation.goBack();
     } catch (error) {
@@ -181,24 +204,24 @@ const WorkAssignedForm = ({route}:any) => {
               cropping: true,
               //   includeBase64: true, // Enable cropping
               compressImageQuality: 0.5,
-              multiple:true
+              multiple: true,
             })
               .then(image => {
                 // console.log('image', image);
                 if (Array.isArray(image)) {
-                    // If multiple images are selected
-                    let arrayImages = [];
-                    for (let i = 0; i < image.length; i++) {
-                      let imagedata = {
-                        path:image[i].path
-                      };
-                      arrayImages.push(imagedata);
-                    }
-                    setImages(arrayImages);
-                  } else {
-                    // If a single image is selected
-                    setImages([image?.path]);
+                  // If multiple images are selected
+                  let arrayImages = [];
+                  for (let i = 0; i < image.length; i++) {
+                    let imagedata = {
+                      path: image[i].path,
+                    };
+                    arrayImages.push(imagedata);
                   }
+                  setImages(arrayImages);
+                } else {
+                  // If a single image is selected
+                  setImages([image?.path]);
+                }
               })
               .catch(e => {
                 if (e.code !== 'E_PICKER_CANCELLED') {
@@ -226,18 +249,22 @@ const WorkAssignedForm = ({route}:any) => {
     }
   };
 
-  
-  const clear =()=>{
-    // AsyncStorage.removeItem('workRecords');
-    setExistingRecordId('');
-  }
+  const clear = () => {
+    AsyncStorage.removeItem('workRecords');
+    // setExistingRecordId('');
+  };
 
   const handleGoingBack = () => {
     setDescription('');
     setSelectedWork('');
     setImages([]);
     navigation.goBack();
+  };
+
+  const handleTransferGarage = (status:any) =>{
+    setTransfered(status);
   }
+
 
   return (
     <View style={Leadsstyles.container}>
@@ -308,33 +335,33 @@ const WorkAssignedForm = ({route}:any) => {
               alignItems: 'center',
             }}>
             <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-              <Text style={styles.text}>{clockStatus === '' ? 'Clock In' : 'Clock Out'}</Text>
+              <Text style={styles.text}>
+                {clockStatus === '' ? 'Clock In' : 'Clock Out'}
+              </Text>
               <Icon name="timer-sand-complete" size={35} color={Colors.white} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={clear} style={styles.button}>
-              <Text style={styles.text}>Transfer To Garage</Text>
+            <TouchableOpacity onPress={handleTransferGarage('transfered')} style={styles.button}>
+              <Text style={[styles.text, {width: 80}]}>Transfer To Garage</Text>
               <Icon name="garage" size={35} color={Colors.white} />
             </TouchableOpacity>
           </View>
 
           <View style={{flexDirection: 'column'}}>
-            <View style={{flexDirection:'row'}}>
-            {images?.map((image, index) => (
-              <Image
-                key={index}
-                source={{uri: image?.path}}
-                style={{
-                  width: 80,
-                  height: 80,
-                  marginLeft: 20,
-                  marginTop: 20,
-                }}
-              />
-            ))}
+            <View style={{flexDirection: 'row'}}>
+              {images?.map((image, index) => (
+                <Image
+                  key={index}
+                  source={{uri: image?.path}}
+                  style={{
+                    width: 80,
+                    height: 80,
+                    marginLeft: 20,
+                    marginTop: 20,
+                  }}
+                />
+              ))}
             </View>
-            <View>
-                
-            </View>
+            <View></View>
           </View>
         </View>
       </ScrollView>
@@ -374,11 +401,14 @@ const styles = StyleSheet.create({
     padding: 5,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 15,
+    borderRadius: 6,
+    width: 160,
+    justifyContent: 'space-around',
   },
   text: {
     color: Colors.Iconwhite,
     fontSize: 15,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
