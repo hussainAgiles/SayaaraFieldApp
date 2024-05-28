@@ -178,6 +178,7 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
               size={25}
               color={Colors.black}
               style={{paddingHorizontal: 3}}
+              onPress={()=>{navigation.navigate('CheckList', {data:assignmentData})}}
             />
             <Menu>
               <MenuTrigger>

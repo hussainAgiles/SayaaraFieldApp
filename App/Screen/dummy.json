@@ -36,10 +36,10 @@
         ]
     },
     "route": {
-        "key": "AssignmentDetails-ojENtEuz-UOofm_dLTQ_c",
-        "name": "AssignmentDetails",
+        "key": "PartsListing-vAYB1CNv0Gcgo75QbjUv4",
+        "name": "PartsListing",
         "params": {
-            "assignment": [Object
+            "data": [Object
             ]
         },
         "path": undefined

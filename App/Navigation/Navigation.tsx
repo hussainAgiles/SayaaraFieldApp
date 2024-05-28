@@ -7,6 +7,7 @@ import VehicleDetails from '../Screen/VehicleDetails';
 import WorkAssignedForm from '../Screen/WorkAssignedForm';
 import PartsListing from '../components/Parts/PartsListing';
 import PartsStockList from '../components/Parts/PartsStockList';
+import CheckList from '../components/CheckList/CheckList';
 
 export type RootStackParamList = {
   Root: undefined;
@@ -14,7 +15,8 @@ export type RootStackParamList = {
   VehicleDetails: any;
   WorkAssignedForm: any;
   PartsStockList: any;
-  PartsListing:any
+  PartsListing: any;
+  CheckList: any;
 };
 
 export default function Navigation() {
@@ -63,6 +65,12 @@ function RootNavigator() {
       <Stack.Screen
         name="PartsStockList"
         component={PartsStockList}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="CheckList"
+        component={CheckList}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
