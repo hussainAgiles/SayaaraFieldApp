@@ -456,7 +456,7 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
         <TextInput placeholder="Search..." onChangeText={handleSearch} />
         <Icon name="magnify" size={20} color={Colors.primary} />
       </View>
-      <View style={{marginTop: 20, paddingHorizontal: 15, marginBottom: 160}}>
+      <View style={{marginTop: 10, paddingHorizontal: 15, marginBottom: 160}}>
         <FlatList
           data={filteredPartDetails}
           renderItem={renderParts}

@@ -31,6 +31,7 @@ import {
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
+import {Switch} from 'react-native';
 
 interface records {
   serviceId: number;
@@ -43,15 +44,22 @@ interface records {
 const WorkAssignedForm = ({route}: any) => {
   const data = route?.params?.record?.item;
 
-  // const {onUpdateItems} = route?.params?.onUpdateItems;
+  const {onUpdateStatus} = route?.params;
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [description, setDescription] = useState(data?.description);
-  const [selectedWork, setSelectedWork] = useState(data?.workType);
+  const [description, setDescription] = useState('');
+  const [selectedWork, setSelectedWork] = useState('');
   const [images, setImages] = useState([]);
   const [clockStatus, setClockStatus] = useState('');
-  const [transfered,setTransfered] = useState('');
-  const {mode,id} = route.params;
+  // const [transfered, setTransfered] = useState('');
+  const {mode, id} = route.params;
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const toggleSwitch = () => {
+    setIsEnabled(previousState => !previousState);
+  };
 
   const workAssigned = [
     {
@@ -93,33 +101,33 @@ const WorkAssignedForm = ({route}: any) => {
 
   useEffect(() => {
     if (mode === 'edit' && id) {
-      setSelectedWork(id.workType);
-      setDescription(id.description);
+      setSelectedWork(id?.workType);
+      setDescription(id?.description);
+      setClockStatus(id?.status);
+      setImages(id?.imagePath)
     }
   }, []);
-
+  
   const handleSubmit = async () => {
     try {
       const newRecord = {
         serviceId: data?.service_number,
-        id:uuid.v4(),
+        id: uuid.v4(),
         workType: selectedWork,
         description: description,
-        imagePath: images.map((image) => image?.path),
+        imagePath: images.map(image => mode === 'edit' ? image : image?.path),
         status: clockStatus === '' ? 'Clock In' : 'Clock Out',
+        transfer_status: isEnabled,
       };
-      
       let records = await AsyncStorage.getItem('workRecords');
-      console.log("this is the recorss",records)
-  
       if (!records) {
         records = [newRecord]; // Wrap newRecord in an array if records is null
       } else {
         records = JSON.parse(records);
-  
+
         if (mode === 'edit') {
           // If editing, find the record by id and update it
-          const index = records.findIndex((record:any) => record.id === id.id);
+          const index = records.findIndex((record: any) => record.id === id.id);
           if (index !== -1) {
             records[index] = newRecord;
           } else {
@@ -131,19 +139,18 @@ const WorkAssignedForm = ({route}: any) => {
           records.push(newRecord);
         }
       }
-      onUpdateItems(newRecord)
+      onUpdateStatus(newRecord);
       // Save the updated records back to AsyncStorage
       await AsyncStorage.setItem('workRecords', JSON.stringify(records));
-  
+
       // Display success message and navigate back
-      Toast.show({ type: 'success', text1: 'Record saved successfully' });
+      Toast.show({type: 'success', text1: 'Record saved successfully'});
       navigation.goBack();
     } catch (error) {
       console.error('Error saving record', error);
-      Toast.show({ type: 'error', text1: 'An error occurred' });
+      Toast.show({type: 'error', text1: 'An error occurred'});
     }
   };
-  
 
   const selectImage = async () => {
     if (Platform.OS === 'android') {
@@ -249,10 +256,10 @@ const WorkAssignedForm = ({route}: any) => {
     }
   };
 
-  const clear = () => {
-    AsyncStorage.removeItem('workRecords');
-    // setExistingRecordId('');
-  };
+  // const clear = () => {
+  //   AsyncStorage.removeItem('workRecords');
+  //   // setExistingRecordId('');
+  // };
 
   const handleGoingBack = () => {
     setDescription('');
@@ -261,10 +268,24 @@ const WorkAssignedForm = ({route}: any) => {
     navigation.goBack();
   };
 
-  const handleTransferGarage = (status:any) =>{
-    setTransfered(status);
-  }
+  // const handleTransferGarage = (status: any) => {
+  //   setTransfered(status);
+  // };
 
+  const handleViewImage = (image: any) => {
+    setSelectedImage(image);
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
+    setIsModalVisible(false);
+  };
+
+  const handleDeleteImage = (index:any) => {
+    const updatedImages = images.filter((_, i) => i !== index);
+    setImages(updatedImages);
+  };
 
   return (
     <View style={Leadsstyles.container}>
@@ -340,28 +361,72 @@ const WorkAssignedForm = ({route}: any) => {
               </Text>
               <Icon name="timer-sand-complete" size={35} color={Colors.white} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleTransferGarage('transfered')} style={styles.button}>
+            {/* <TouchableOpacity onPress={()=>handleTransferGarage('transfered')} style={styles.button}>
               <Text style={[styles.text, {width: 80}]}>Transfer To Garage</Text>
               <Icon name="garage" size={35} color={Colors.white} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            <View
+              style={[
+                styles.button,
+                {padding: 10, justifyContent: 'space-between'},
+              ]}>
+              <Text style={styles.text}>Transfer to Garage</Text>
+              <Switch
+                trackColor={{false: '#767577', true: '#81b0ff'}}
+                thumbColor={isEnabled ? Colors.Iconwhite : Colors.lightBg}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+              />
+            </View>
           </View>
 
           <View style={{flexDirection: 'column'}}>
             <View style={{flexDirection: 'row'}}>
               {images?.map((image, index) => (
-                <Image
-                  key={index}
-                  source={{uri: image?.path}}
-                  style={{
-                    width: 80,
-                    height: 80,
-                    marginLeft: 20,
-                    marginTop: 20,
-                  }}
-                />
+                <View key={index}>
+                  <TouchableOpacity
+                    onPress={() => handleViewImage(mode === 'edit' ? image : image?.path )}>
+                    <Image
+                      key={index}
+                      source={{uri: mode === 'edit' ? image : image?.path}}
+                      style={{
+                        width: 80,
+                        height: 80,
+                        marginLeft: 20,
+                        marginTop: 20,
+                      }}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleDeleteImage(index)}
+                    style={styles.deleteButton}>
+                    <Icon name="close" size={20} color="red" />
+                  </TouchableOpacity>
+                </View>
               ))}
             </View>
-            <View></View>
+            <View>
+              {selectedImage && (
+                <Modal
+                  visible={isModalVisible}
+                  transparent={true}
+                  animationType="slide"
+                  onRequestClose={closeModal}>
+                  <View style={styles.modalContainer}>
+                    <Image
+                      source={{uri: selectedImage}}
+                      style={styles.modalImage}
+                    />
+                    <TouchableOpacity
+                      onPress={closeModal}
+                      style={styles.closeButton}>
+                      <Text style={styles.closeButtonText}>Close</Text>
+                    </TouchableOpacity>
+                  </View>
+                </Modal>
+              )}
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -410,5 +475,34 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalImage: {
+    width: '70%',
+    height: '70%',
+    resizeMode: 'contain',
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: 'white',
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: Colors.black,
+    fontSize: 16,
+  },
+  deleteButton: {
+    position: 'absolute',
+    top: 10,
+    right: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 10,
+    padding: 2,
   },
 });

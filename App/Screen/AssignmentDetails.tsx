@@ -1,5 +1,13 @@
-import {Alert, FlatList, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {
+  Alert,
+  FlatList,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Menu,
   MenuOption,
@@ -42,7 +50,6 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
     }
   };
 
-
   useEffect(() => {
     fetchWorkAssigned();
   }, [workRecords]);
@@ -76,25 +83,31 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
             try {
               const updatedRecords = [...workRecords];
               updatedRecords.splice(index, 1);
-              await AsyncStorage.setItem('workRecords', JSON.stringify(updatedRecords));
+              await AsyncStorage.setItem(
+                'workRecords',
+                JSON.stringify(updatedRecords),
+              );
               setWorkRecords(updatedRecords);
-              Toast.show({ type: 'success', text1: 'Deleted Successfully' });
+              Toast.show({type: 'success', text1: 'Deleted Successfully'});
             } catch (error) {
               console.error('Error deleting record', error);
-              Toast.show({ type: 'error', text1: 'An error occurred' });
+              Toast.show({type: 'error', text1: 'An error occurred'});
             }
           },
         },
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
 
   const editRecord = (data: any) => {
     // console.log("Record ===",data?.item);
-    navigation.navigate('WorkAssignedForm', { mode: 'edit', id:data?.item});
+    navigation.navigate('WorkAssignedForm', {
+      mode: 'edit',
+      id: data?.item,
+      onUpdateStatus: handleUpdateStatus,
+    });
   };
-
 
   const renderItem = (data: any) => {
     return (
@@ -134,11 +147,10 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
     );
   };
 
-  const handleUpdateStatus = (updatedItems:any) => {
+  const handleUpdateStatus = (updatedItems: any) => {
     // Update checkoutItems in parent component
     setCheckoutData(updatedItems);
-    console.log("updatedItems === ",updatedItems)
-
+    // console.log("updatedItems === ",updatedItems)
   };
 
   return (
@@ -165,7 +177,9 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
               size={20}
               color={Colors.black}
               style={{paddingHorizontal: 3}}
-              onPress={()=>{navigation.navigate('PartsListing', {data:assignmentData})}}
+              onPress={() => {
+                navigation.navigate('PartsListing', {data: assignmentData});
+              }}
             />
             <Icon
               name="car"
@@ -178,7 +192,9 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
               size={25}
               color={Colors.black}
               style={{paddingHorizontal: 3}}
-              onPress={()=>{navigation.navigate('CheckList', {data:assignmentData})}}
+              onPress={() => {
+                navigation.navigate('CheckList', {data: assignmentData});
+              }}
             />
             <Menu>
               <MenuTrigger>
@@ -192,7 +208,60 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
             </Menu>
           </View>
         </View>
-        <ScrollView contentContainerStyle={{marginTop: 10, marginHorizontal: 20,paddingBottom:100}} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          contentContainerStyle={{
+            marginTop: 10,
+            marginHorizontal: 20,
+            paddingBottom: 100,
+          }}
+          showsVerticalScrollIndicator={false}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 10,
+            }}>
+            <TouchableOpacity
+              style={{
+                backgroundColor: Colors.primary,
+                padding: 12,
+                borderRadius: 10,
+              }}>
+              <Text
+                style={{
+                  color: Colors.Iconwhite,
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                }}>
+                First Free Service
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: Colors.green,
+                padding: 12,
+                borderRadius: 25,
+                width: 120,
+              }}>
+              {checkoutData.status == null ? (
+              <Text
+                style={{
+                  color: Colors.Iconwhite,
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                }}>
+                Open
+              </Text>
+            ):  <Text
+            style={{
+              color: Colors.Iconwhite,
+              textAlign: 'center',
+              fontWeight: 'bold',
+            }}>
+            {checkoutData?.status}
+          </Text>}
+            </TouchableOpacity>
+          </View>
           <View style={{flexDirection: 'column'}}>
             <View
               style={{
@@ -356,7 +425,7 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
                 style={{
                   flexDirection: 'column',
                   paddingHorizontal: 10,
-                  marginLeft: '36%',
+                  marginLeft: '35%',
                 }}>
                 <Text
                   style={{
@@ -390,11 +459,12 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
               Work Allotment
             </Text>
             <TouchableOpacity
-              onPress={() => {
+              onPress={useCallback(() => {
                 navigation.navigate('WorkAssignedForm', {
-                  record: {item: assignmentData}
+                  record: {item: assignmentData},
+                  onUpdateStatus: handleUpdateStatus,
                 });
-              }}>
+              }, [])}>
               <Icon name="plus" size={25} color={Colors.white} />
             </TouchableOpacity>
           </View>

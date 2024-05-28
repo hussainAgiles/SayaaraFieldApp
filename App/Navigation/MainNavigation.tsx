@@ -69,16 +69,7 @@ const MainNavigator: React.FC = () => {
                     unmountOnBlur:true
                 }}
             />
-            <Tab.Screen
-                name="Calender"
-                component={Calendar}
-                options={{
-                    tabBarIcon: props => (
-                        <TabIcon name="calendar" {...props} label="Calender" />
-                    ),
-                    unmountOnBlur:true
-                }}
-            />
+
             <Tab.Screen
                 name="Inventory"
                 component={Inventory}

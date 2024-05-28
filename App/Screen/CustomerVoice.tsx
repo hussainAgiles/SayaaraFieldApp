@@ -28,7 +28,7 @@ type CustomerDetailsProps = {
   extraData: any;
 };
 
-const CustomerInvoice: React.FC<CustomerDetailsProps> = ({
+const CustomerVoice: React.FC<CustomerDetailsProps> = ({
   route,
   extraData,
 }: any) => {
@@ -413,7 +413,7 @@ const CustomerInvoice: React.FC<CustomerDetailsProps> = ({
                 fontSize: 16,
                 fontWeight: 'bold',
               }}>
-              Customer Invoice
+              Customer Voice
             </Text>
           </View>
           <FlatList data={dummyServices} renderItem={renderItem} />
@@ -423,7 +423,7 @@ const CustomerInvoice: React.FC<CustomerDetailsProps> = ({
   );
 };
 
-export default CustomerInvoice;
+export default CustomerVoice;
 
 const styles = StyleSheet.create({
   container: {

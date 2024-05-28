@@ -35,7 +35,7 @@ const CustomDrawer = (props:any) => {
               fontFamily: 'Roboto-Medium',
               marginBottom: 5,
             }}>
-            Rahul Reddy
+            Shaik Sabier Hussain
           </Text>
           <View style={{flexDirection: 'row'}}>
             <Text
@@ -44,7 +44,7 @@ const CustomDrawer = (props:any) => {
                 fontFamily: 'Roboto-Regular',
                 marginRight: 5,
               }}>
-              Sales Person
+              Field Officer
             </Text>
           </View>
         </ImageBackground>

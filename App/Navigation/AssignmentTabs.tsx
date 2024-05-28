@@ -3,9 +3,9 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import TabIcon from './TabBarIcon';
 import AssignmentDetails from '../Screen/AssignmentDetails';
-import CustomerInvoice from '../Screen/CustomerInvoice';
 import Messages from '../Screen/Messages';
 import Colors from '../constants/Colors';
+import Customervoice from '../Screen/CustomerVoice';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,8 +42,8 @@ const AssignmentTabs: React.FC<AssignmentTabsProps> = ({data}: any) => {
       </Tab.Screen>
 
       <Tab.Screen
-        name="Customer Voice"
-        component={CustomerInvoice}
+        name="CustomerVoice"
+        component={Customervoice}
         options={{
           tabBarIcon: props => (
             <TabIcon name="account-voice" {...props} label="Customer Voice" />
