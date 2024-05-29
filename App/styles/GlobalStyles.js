@@ -506,7 +506,14 @@ export const homeStyles = StyleSheet.create({
     padding: 7,
     color: Colors.Iconwhite,
     borderRadius: 15,
-  }
+  },
+  noDataText: {
+    color: Colors.black,
+    fontSize: 18,
+    textAlign: 'center',
+    justifyContent:'center',
+    alignItems:'center'
+  },
 });
 
 
@@ -597,5 +604,142 @@ export const inventoryStyles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export const pendingStyles = StyleSheet.create({
+  container: {
+    backgroundColor: '#F3F3F3',
+    paddingBottom: 20,
+  },
+  headerContainer: {
+    backgroundColor: Colors.primary,
+    padding: 20,
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
+  },
+  ProfileContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  profileDetails: {
+    flexDirection: 'row',
+  },
+  profileTextContainer: {
+    marginLeft: 10,
+  },
+  NameText: {
+    color: Colors.Iconwhite,
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  roleText: {
+    color: Colors.Iconwhite,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  profileImageContainer: {
+    height: 50,
+    width: 50,
+    backgroundColor: Colors.Iconwhite,
+    borderRadius: 25,
+  },
+  profileImage: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+  },
+  contentContainer: {
+    padding: 10,
+  },
+  boxContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: 15,
+  },
+  boxWrapper: {
+    flex: 1,
+  },
+  box: {
+    backgroundColor: Colors.Iconwhite,
+    padding: 15,
+    margin: 5,
+    elevation: 4,
+    borderWidth: 0.8,
+    borderColor: Colors.lightGrey,
+    justifyContent: 'center',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  boxText: {
+    fontSize: 25,
+    color: Colors.black,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  boxLabel: {
+    fontSize: 14,
+    color: Colors.lightGreish,
+    textAlign: 'center',
+    fontWeight: '500',
+  },
+  headerView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 25,
+  },
+  HeaderText: {
+    color: Colors.black,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  viewAllText: {
+    color: Colors.black,
+    fontSize: 14,
+  },
+  assignmentList: {
+    marginTop: 20,
+  },
+  assignmentItem: {
+    flexDirection: 'column',
+    backgroundColor: Colors.Iconwhite,
+    marginHorizontal: 18,
+    marginBottom: 20,
+    borderRadius: 5,
+  },
+  dateTime: {
+    backgroundColor: Colors.primary,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  dateText: {
+    color: Colors.white,
+  },
+  dataContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+  },
+  customerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.black,
+  },
+  status: {
+    fontWeight: "400",
+    backgroundColor: Colors.primary,
+    padding: 7,
+    color: Colors.Iconwhite,
+    borderRadius: 15,
+  },
+  noDataText: {
+    color: Colors.black,
+    fontSize: 18,
+    textAlign: 'center',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+})
 
 

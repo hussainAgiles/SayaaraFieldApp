@@ -1,11 +1,9 @@
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Agenda } from 'react-native-calendars';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/Header/Header';
 import Colors from '../constants/Colors';
-import Toast from 'react-native-toast-message';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Agenda, AgendaEntry} from 'react-native-calendars';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Allocation = () => {
   const getCurrentDate = () => {
@@ -174,7 +172,7 @@ const Allocation = () => {
     // Add more items as needed
   ];
 
-  const assignmentsByDate = recentAssignments.reduce((acc, assignment) => {
+  const assignmentsByDate = recentAssignments.reduce((acc:any, assignment) => {
     const date = assignment.date;
     if (!acc[date]) {
       acc[date] = [];
@@ -236,6 +234,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginBottom: 20,
     borderRadius: 5,
+    marginVertical:20
   },
   dateTime: {
     backgroundColor: Colors.primary,

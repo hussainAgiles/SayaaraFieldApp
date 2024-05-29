@@ -8,6 +8,8 @@ import WorkAssignedForm from '../Screen/WorkAssignedForm';
 import PartsListing from '../components/Parts/PartsListing';
 import PartsStockList from '../components/Parts/PartsStockList';
 import CheckList from '../components/CheckList/CheckList';
+import Allocation from '../Screen/Allocation';
+import Pending from '../Screen/Pending';
 
 export type RootStackParamList = {
   Root: undefined;
@@ -17,6 +19,8 @@ export type RootStackParamList = {
   PartsStockList: any;
   PartsListing: any;
   CheckList: any;
+  Allocation:any;
+  Pending:any;
 };
 
 export default function Navigation() {
@@ -71,6 +75,18 @@ function RootNavigator() {
       <Stack.Screen
         name="CheckList"
         component={CheckList}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="Allocation"
+        component={Allocation}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="Pending"
+        component={Pending}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
