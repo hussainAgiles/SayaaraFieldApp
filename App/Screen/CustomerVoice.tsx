@@ -229,7 +229,7 @@ const CustomerVoice: React.FC<CustomerDetailsProps> = ({
                     paddingVertical: 3,
                   }}>
                   {/* {assignmentData?.customer} */}
-                  Mr. Marcus Stoinis
+                  Mr. Abdul Hashim
                 </Text>
                 <Text>
                   {/* {assignmentData?.mobile} */}
