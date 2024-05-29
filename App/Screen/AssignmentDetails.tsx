@@ -1,3 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -7,7 +11,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   Menu,
   MenuOption,
@@ -15,18 +19,19 @@ import {
   MenuProvider,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import Colors from '../constants/Colors';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../navigation/Navigation';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Colors from '../constants/Colors';
+import { RootStackParamList } from '../navigation/Navigation';
 
 type AssignmentDetailsProps = {
   extraData: any;
 };
+
+interface Checkout {
+  id: number;
+  status:any;
+}
 
 const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
   route,
@@ -36,7 +41,7 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
   // console.log("Recieved props === ",assignmentData)
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [workRecords, setWorkRecords] = useState([]);
-  const [checkoutData, setCheckoutData] = useState([]);
+  const [checkoutData, setCheckoutData] = useState<Checkout[]>([]);
 
   // console.log("Record ===",WorkRecords);
 

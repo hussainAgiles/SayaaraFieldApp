@@ -1,27 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  Modal,
-  TextInput,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
+  Alert,
   Image,
+  Modal,
+  PermissionsAndroid,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import {Dropdown} from 'react-native-element-dropdown';
-import Colors from '../constants/Colors';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Dropdown } from 'react-native-element-dropdown';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import {Alert} from 'react-native';
-import {Platform} from 'react-native';
-import {PermissionsAndroid} from 'react-native';
-import Header from '../components/Header/Header';
-import {Leadsstyles, GlobalStyles} from '../styles/GlobalStyles';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../navigation/Navigation';
-import {useNavigation} from '@react-navigation/native';
 import {
   Menu,
   MenuOption,
@@ -29,9 +25,11 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import Toast from 'react-native-toast-message';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
-import {Switch} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Colors from '../constants/Colors';
+import { RootStackParamList } from '../navigation/Navigation';
+import { GlobalStyles, Leadsstyles } from '../styles/GlobalStyles';
 
 interface records {
   serviceId: number;
@@ -115,7 +113,7 @@ const WorkAssignedForm = ({route}: any) => {
         id: uuid.v4(),
         workType: selectedWork,
         description: description,
-        imagePath: images.map(image => mode === 'edit' ? image : image?.path),
+        imagePath: images.map((image:any) => mode === 'edit' ? image : image?.path),
         status: clockStatus === '' ? 'Clock In' : 'Clock Out',
         transfer_status: isEnabled,
       };

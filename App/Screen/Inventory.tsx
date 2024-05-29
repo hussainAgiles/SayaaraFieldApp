@@ -1,19 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   FlatList,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Header from '../components/Header/Header';
 import Colors from '../constants/Colors';
 import { RootStackParamList } from '../navigation/Navigation';
-import { Leadsstyles } from '../styles/GlobalStyles';
-import Header from '../components/Header/Header';
+import { Leadsstyles, inventoryStyles } from '../styles/GlobalStyles';
 
 type CarPart = {
   id: number;
@@ -34,9 +33,7 @@ interface PartsListProps {
   onCheckout: (items: CheckoutItem[]) => void;
 }
 
-const Inventory : React.FC<PartsListProps> = ({route}:any) => {
-  // const { data, onUpdateCheckoutItems } = route.params;
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
 
   const initialCarParts = [
     {
@@ -52,6 +49,7 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
       hs_code: 85371090,
       inventory: 'Engine Inventory',
       qty: 0,
+      part_code:'ECU-345'
     },
     {
       id: 2,
@@ -66,6 +64,7 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
       hs_code: 85115000,
       inventory: 'Engine Inventory',
       qty: 0,
+      part_code:'ALT-765'
     },
     {
       id: 3,
@@ -80,6 +79,7 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
       hs_code: 87083090,
       inventory: 'Brake Parts Inventory',
       qty: 0,
+      part_code:'BPD-678'
     },
     {
       id: 4,
@@ -94,6 +94,7 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
       hs_code: 85111000,
       inventory: 'Plugs Inventory',
       qty: 0,
+      part_code:'SP-223'
     },
     {
       id: 5,
@@ -108,6 +109,7 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
       hs_code: '8413.30.90',
       inventory: 'Fuel Inventory',
       qty: 0,
+      part_code:'FPM-445'
     },
     {
       id: 6,
@@ -122,6 +124,7 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
       hs_code: 84212300,
       inventory: 'Radiator & Filter',
       qty: 0,
+      part_code:'OLF-334'
     },
     {
       id: 7,
@@ -136,6 +139,7 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
       hs_code: 84213100,
       inventory: 'Radiator & Filter',
       qty: 0,
+      part_code:'ARF-778'
     },
     {
       id: 8,
@@ -150,6 +154,7 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
       hs_code: 87089100,
       inventory: 'Radiator & Filter',
       qty: 0,
+      part_code:'RDR-990'
     },
     {
       id: 9,
@@ -164,6 +169,7 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
       hs_code: 38190000,
       inventory: 'Fluids Inventory',
       qty: 0,
+      part_code:'TRF-456'
     },
     {
       id: 10,
@@ -178,158 +184,35 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
       hs_code: 87089990,
       inventory: 'Belt Inventory',
       qty: 0,
+      part_code:'TBT-887'
     },
   ];
 
-  const [searchQuery, setSearchQuery] = useState('');
-  // const [carParts, setCarParts] = useState<CarPart[]>(initialCarParts);
-  // const [showQuantity, setShowQuantity] = useState<{ [key: number]: boolean }>({});
 
+  const [searchQuery, setSearchQuery] = useState('');
 
   const renderParts = (partsData: any) => {
     return (
-      <View
-        style={{
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          marginVertical: 10,
-          backgroundColor: Colors.white,
-          padding: 15,
-          borderRadius: 20,
-          elevation: 5,
-        }}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View style={{flexDirection: 'column'}}>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: Colors.black,
-              }}>
-              {partsData?.item.part_name}
-            </Text>
-            <Text style={{fontSize: 16, paddingVertical: 5}}>
-              {partsData?.item.manufacturer}
-            </Text>
+      <View style={inventoryStyles.partContainer}>
+        <View style={inventoryStyles.partHeader}>
+          <View style={inventoryStyles.partHeaderTextContainer}>
+            <Text style={inventoryStyles.partName}>{partsData?.item.part_name}</Text>
+            <Text style={inventoryStyles.partNumber}>Part No : {partsData?.item.part_number}</Text>
           </View>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: 'bold',
-              color: Colors.black,
-              paddingVertical: 5,
-            }}>
-            {/* QAR {partsData?.item.price * partsData?.item.qty} */}
-            QAR {partsData?.item.price}
-          </Text>
+          <Text style={inventoryStyles.price}>QAR {partsData?.item.price}</Text>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View style={{flexDirection: 'column'}}>
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: '400',
-                color: Colors.black,
-              }}>
-              Part No : {partsData?.item.part_number}
-            </Text>
-            <Text style={{fontSize: 16, paddingVertical: 5}}>
-              Qty Available: {partsData?.item.stock_quantity}
-            </Text>
+        <View style={inventoryStyles.partDetails}>
+          <View style={inventoryStyles.partDetailsTextContainer}>
+          <Text style={inventoryStyles.manufacturer}>{partsData?.item.manufacturer}</Text>
+          <Text style={inventoryStyles.inventoryText}>Inventory : {partsData?.item.inventory}</Text>
           </View>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '400',
-              color: Colors.black,
-              paddingVertical: 5,
-            }}>
-            HS Code :{partsData?.item.hs_code}
-          </Text>
+          <Text style={inventoryStyles.hsCode}>HS Code : {partsData?.item.hs_code}</Text>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '400',
-              color: Colors.black,
-            }}>
-            Inventory : {partsData?.item.inventory}
-          </Text>
-
-          {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            {partsData?.item.stock_quantity === 0 ? (<TouchableOpacity onPress={()=> handleRequestPart(partsData?.item.id)}
-              style={{
-                backgroundColor: Colors.red,
-                paddingVertical: 7,
-                paddingHorizontal: 15,
-                borderRadius: 5,
-              }}>
-              <Text style={{color: Colors.Iconwhite}}>Request Part</Text>
-            </TouchableOpacity>): partsData?.item.qty === 0 && !showQuantity[partsData?.item.id] ? (<TouchableOpacity onPress={()=>handleAdd(partsData?.item?.id)}
-              style={{
-                backgroundColor: Colors.primary,
-                paddingVertical: 7,
-                paddingHorizontal: 15,
-                borderRadius: 5,
-              }}>
-              <Text style={{color: Colors.Iconwhite}}>Add</Text>
-            </TouchableOpacity>) :(
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity
-                style={{
-                  width: 25,
-                  borderWidth: 0.7,
-                  height: 30,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: Colors.primary,
-                }}
-                onPress={() => handleDecrement(partsData?.item.id)}
-                disabled={partsData?.item.qty === 0}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    alignItems: 'center',
-                    fontSize: 20,
-                    color: Colors.Iconwhite,
-                  }}>
-                  -
-                </Text>
-              </TouchableOpacity>
-              <View
-                style={{
-                  width: 30,
-                  height: 30,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text style={{textAlign: 'center', fontSize: 20}}>
-                  {partsData?.item.qty}
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={{
-                  width: 25,
-                  borderWidth: 0.7,
-                  height: 30,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: Colors.primary,
-                }}
-                onPress={() => handleIncrement(partsData?.item.id)}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    alignItems: 'center',
-                    fontSize: 20,
-                    color: Colors.Iconwhite,
-                  }}>
-                  +
-                </Text>
-              </TouchableOpacity>
-            </View>) }
-          </View> */}
+        <View style={inventoryStyles.inventoryContainer}>
+        <Text style={inventoryStyles.stockQuantity}>Qty Available: {partsData?.item.stock_quantity}</Text>
+        <Text style={{fontSize: 16, paddingVertical: 5}}>
+             Part code: {partsData?.item?.part_code}
+        </Text>
         </View>
       </View>
     );
@@ -355,25 +238,18 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
     });
   }, [initialCarParts, searchQuery]);
 
-  return (
+  return ( 
     <View style={Leadsstyles.container}>
-      <Header text="Inventory"/>
-      {/* Dropdaown with car image */}
-      <View
-        style={{
-          flexDirection: 'row',
-          paddingHorizontal: 20,
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginTop: 10,
-          borderWidth: 0.7,
-          marginHorizontal: 15,
-          borderRadius: 10,
-        }}>
-        <TextInput placeholder="Search..." onChangeText={handleSearch} />
+      <Header text="Inventory" />
+      <View style={inventoryStyles.searchContainer}>
+        <TextInput
+          placeholder="Search..."
+          onChangeText={handleSearch}
+          style={inventoryStyles.searchInput}
+        />
         <Icon name="magnify" size={20} color={Colors.primary} />
       </View>
-      <View style={{marginTop: 10, paddingHorizontal: 15, marginBottom: 200}}>
+      <View style={inventoryStyles.listContainer}>
         <FlatList
           data={filteredPartDetails}
           renderItem={renderParts}
@@ -383,7 +259,7 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
           maxToRenderPerBatch={5}
           windowSize={5}
           ListEmptyComponent={
-            <Text style={styles.noDataText}>No data found.</Text>
+            <Text style={inventoryStyles.noDataText}>No data found.</Text>
           }
         />
       </View>
@@ -393,42 +269,4 @@ const Inventory : React.FC<PartsListProps> = ({route}:any) => {
 
 export default Inventory;
 
-const styles = StyleSheet.create({
-  dropdown: {
-    backgroundColor: Colors.white,
-    borderRadius: 5,
-    padding: 10,
-    marginVertical: 7,
-    borderWidth: 0.2,
-    borderColor: Colors.black,
-    width: '60%',
-    height: 45,
-  },
-  image: {
-    width: 120,
-    height: 100,
-  },
-  categoryItem: {
-    borderRadius: 5,
-    padding: 10,
-    marginHorizontal: 5,
-  },
-  focusedCategoryItem: {
-    borderColor: Colors.red, // Change to your desired focused color
-  },
-  noDataText: {
-    color: Colors.black,
-    fontSize: 18,
-    textAlign: 'center',
-  },
-  checkoutButton:{
-    backgroundColor:Colors.green,
-    alignItems:'center',
-    padding:12,
-    borderRadius:10,
-    
-  },
-  checkoutButtonText:{
-    color:Colors.white
-  }
-});
+

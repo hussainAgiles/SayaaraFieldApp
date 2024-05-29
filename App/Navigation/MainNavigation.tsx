@@ -1,37 +1,13 @@
-import { createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import Colors from '../constants/Colors';
-import TabIcon from './TabBarIcon';
-import Home from '../Screen/Home';
+import { StyleSheet } from 'react-native';
 import Allocation from '../Screen/Allocation';
-import Calendar from '../Screen/Calendar';
 import Inventory from '../Screen/Inventory';
+import Colors from '../constants/Colors';
 import DrawerNavigator from './DrawerTab';
+import TabIcon from './TabBarIcon';
 
 const Tab = createBottomTabNavigator();
-
-const CustomTabBarButton = ({ children, onPress }: any) => {
-    return (
-        <TouchableOpacity
-            style={{
-                top: -30,
-                justifyContent: 'center',
-                alignItems: 'center',
-                ...styles.shadow
-            }}
-            onPress={onPress}>
-            <View style={{
-                width: 50, height: 50,
-                borderRadius: 35,
-                backgroundColor: Colors.primary
-            }}>
-                {children}
-            </View>
-        </TouchableOpacity>
-    );
-};
-
 const MainNavigator: React.FC = () => {
     return (
         <Tab.Navigator
@@ -89,17 +65,6 @@ const MainNavigator: React.FC = () => {
 };
 
 
-const styles = StyleSheet.create({
-    shadow: {
-        shadowColor: "#7F5DF0",
-        shadowOffset: {
-            width: 0,
-            height: 10
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.5,
-        elevation: 5,
-    }
-})
+
 
 export default MainNavigator;
