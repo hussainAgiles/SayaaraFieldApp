@@ -1,24 +1,32 @@
-import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useCallback, useState } from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Colors from '../../constants/Colors';
+import {
+  Alert,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {
   Menu,
   MenuOption,
   MenuOptions,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../navigation/Navigation';
-import {useNavigation} from '@react-navigation/native';
-import {FlatList} from 'react-native';
-import PartsStockList from './PartsStockList';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Colors from '../../constants/Colors';
+import { RootStackParamList } from '../../navigation/Navigation';
+import { inventoryStyles } from '../../styles/GlobalStyles';
+import Toast from 'react-native-toast-message';
 
 const PartsListing = (data: any) => {
   const recordData = data?.route?.params?.data;
   const [checkoutItems, setCheckoutItems] = useState([]);
 
-  // console.log('Recorded Data = ', recordData);
+  // console.log('Recorded Data = ', checkoutItems);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleMenuSelect = (value: any) => {
@@ -31,61 +39,90 @@ const PartsListing = (data: any) => {
     }
   };
 
+  const handleDeleteParts = (id:any) =>{
+    Alert.alert(
+      'Are you sure?',
+      "You won't be able to revert this!",
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: async () => {
+            try {
+              const updatedPartsList = checkoutItems.filter(record => record?.id !== id);
+              setCheckoutItems(updatedPartsList);
+              Toast.show({type: 'success', text1: 'Deleted Successfully'});
+            } catch (error) {
+              console.error('Error deleting record', error);
+              Toast.show({type: 'error', text1: 'An error occurred'});
+            }
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  }
+
   const renderItem = (event: any) => {
     if (event?.item?.qty > 0) {
       return (
-        <View
-          style={{
-            flexDirection: 'row',
-          }}>
-          <View
-            style={{
-              borderRadius: 10,
-              elevation: 7,
-              padding: 15,
-              backgroundColor: Colors.Iconwhite,
-              marginVertical: 6,
-              flexDirection: 'row',
-              width: '84%',
-              justifyContent: 'space-between',
-            }}>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: '400',
-                color: Colors.black,
-              }}>
-              {event?.item?.item_name}
+        <View style={inventoryStyles.partContainer}>
+          <View style={inventoryStyles.partHeader}>
+            <View style={inventoryStyles.partHeaderTextContainer}>
+              <Text style={inventoryStyles.partName}>
+                {event?.item?.item_name}
+              </Text>
+              <Text style={inventoryStyles.partNumber}>
+                Part No : {event?.item?.partnumber}
+              </Text>
+            </View>
+            <Text style={inventoryStyles.price}>
+              QAR {event?.item?.price * event?.item?.qty}
             </Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-              <TouchableOpacity>
-                <Icon name="pencil" size={25} color={Colors.primary} />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Icon name="delete" size={25} color={Colors.red} />
-              </TouchableOpacity>
+          </View>
+          <View style={inventoryStyles.partDetails}>
+            <View style={inventoryStyles.partDetailsTextContainer}>
+              <Text style={{fontSize: 17, paddingVertical: 3}}>
+                Short code: {event?.item?.short_code}
+              </Text>
+              <Text style={inventoryStyles.manufacturer}>
+                {event?.item?.manufacturer}
+              </Text>
+              <Text style={inventoryStyles.inventoryText}>
+                Inventory : {event?.item?.inventory}
+              </Text>
+            </View>
+            <View style={inventoryStyles.inventoryContainer}>
+              <Text
+                style={{
+                  backgroundColor: Colors.lightGreish,
+                  padding: 5,
+                  color: Colors.white,
+                  fontWeight: 'bold',
+                  fontSize: 16,
+                }}>
+                {' '}
+                Qty Available
+              </Text>
+              <Text style={inventoryStyles.stockQuantity}>
+                {event?.item?.qty}
+              </Text>
             </View>
           </View>
-          <View
-            style={{
-              width: '12%',
-              borderRadius: 11,
-              justifyContent: 'center',
-              alignItems: 'center',
-              elevation: 7,
-              backgroundColor: Colors.Iconwhite,
-              marginVertical: 8,
-              marginLeft: 10,
-            }}>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: '400',
-                color: Colors.black,
-              }}>
-              {event?.item?.qty}
-            </Text>
-          </View>
+          <View style={{ flexDirection: 'row',justifyContent:'space-around',alignItems:'center'}}>
+              <TouchableOpacity style={[inventoryStyles.button,{backgroundColor:Colors.primary}]}>
+                <Text style={{color:Colors.white,fontSize:16,fontWeight:'bold'}}>Edit</Text>
+                {/* <Icon name="pencil" size={25} color={Colors.primary} /> */}
+              </TouchableOpacity>
+              <TouchableOpacity style={[inventoryStyles.button,{backgroundColor:Colors.red}]}>
+              <Text style={{color:Colors.white,fontSize:16,fontWeight:'bold'}} onPress={()=>handleDeleteParts(event?.item?.id)}>Delete</Text>
+                {/* <Icon name="delete" size={25} color={Colors.red} /> */}
+              </TouchableOpacity>
+            </View>
         </View>
       );
     } else {
@@ -94,10 +131,9 @@ const PartsListing = (data: any) => {
     }
   };
 
-  const handleUpdateCheckoutItems = (updatedItems:any) => {
+  const handleUpdateCheckoutItems = (updatedItems: any) => {
     // Update checkoutItems in parent component
     setCheckoutItems(updatedItems);
-
   };
 
   return (
@@ -109,7 +145,12 @@ const PartsListing = (data: any) => {
           alignItems: 'center',
         }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Icon name="arrow-left" size={30} color={Colors.black} onPress={()=> navigation.goBack()}/>
+          <Icon
+            name="arrow-left"
+            size={30}
+            color={Colors.black}
+            onPress={() => navigation.goBack()}
+          />
           <Text
             style={{
               fontSize: 18,
@@ -127,9 +168,10 @@ const PartsListing = (data: any) => {
               size={30}
               color={Colors.primary}
               onPress={useCallback(() => {
-                navigation.navigate('PartsStockList',{data:recordData,
-                onUpdateCheckoutItems:handleUpdateCheckoutItems
-                })
+                navigation.navigate('PartsStockList', {
+                  data: recordData,
+                  onUpdateCheckoutItems: handleUpdateCheckoutItems,
+                });
               }, [])}
             />
           </TouchableOpacity>
@@ -145,7 +187,9 @@ const PartsListing = (data: any) => {
           </Menu>
         </View>
       </View>
-      <ScrollView style={{marginHorizontal: 10, marginTop: 20}} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={{marginHorizontal: 10, marginTop: 20}}
+        showsVerticalScrollIndicator={false}>
         <Text style={{fontSize: 18, fontWeight: 'bold', color: Colors.black}}>
           #{recordData?.service_number}
         </Text>
@@ -160,7 +204,7 @@ const PartsListing = (data: any) => {
           initialNumToRender={5} // Adjust numbers based on your list size and performance
           maxToRenderPerBatch={5}
           windowSize={5}
-          style={{marginTop:10}}
+          style={{marginTop: 10}}
           ListEmptyComponent={
             <Text style={styles.noDataText}>No data found.</Text>
           }

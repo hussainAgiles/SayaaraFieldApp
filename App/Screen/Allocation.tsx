@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Agenda } from 'react-native-calendars';
+import React, {useState} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Agenda} from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/Header/Header';
 import Colors from '../constants/Colors';
@@ -13,18 +13,18 @@ const Allocation = () => {
 
   const [selectedDay, setSelectedDay] = useState(getCurrentDate());
 
-  const renderItem = (reservation:any) => {
+  const renderItem = (reservation: any) => {
     return (
       <TouchableOpacity style={styles.assignmentItem}>
         <View style={styles.dateTime}>
-          <Text style={{ color: Colors.white }}>
+          <Text style={{color: Colors.white}}>
             #{reservation.service_number}
           </Text>
-          <Text style={{ color: Colors.white }}>{reservation.date}</Text>
-          <Text style={{ color: Colors.white }}>{reservation.time}</Text>
+          <Text style={{color: Colors.white}}>{reservation.date}</Text>
+          <Text style={{color: Colors.white}}>{reservation.time}</Text>
         </View>
         <View style={styles.dataContainer}>
-          <View>
+          <View style={{flexDirection: 'column'}}>
             <Text
               style={{
                 fontSize: 18,
@@ -33,13 +33,36 @@ const Allocation = () => {
               }}>
               {reservation.customer}
             </Text>
-            <Text>{reservation.location}</Text>
+            <Text
+              style={{
+                fontSize: 15,
+                color: Colors.black,
+              }}>
+              {reservation.location}
+            </Text>
+            {/* <View style={{flexDirection:'row',alignItems:'center',marginLeft:-5}}>
+              <Icon name="map-marker" size={25} color={Colors.primary} />
+              <Text>{reservation.location}</Text>
+            </View> */}
           </View>
           <Icon name="phone" size={25} color={Colors.primary} />
         </View>
         <View style={styles.dataContainer}>
           <View>
-            <Text>{reservation.vehicle}</Text>
+            <Text
+              style={{
+                fontSize: 15,
+                color: Colors.black,
+                fontWeight:'bold'
+              }}>
+              {reservation.Reg_no}
+            </Text>
+            <Text
+              style={{
+                fontSize: 15,
+              }}>
+              {reservation.vehicle}
+            </Text>
             <Text>{reservation.job_type}</Text>
           </View>
           <Text style={styles.status}>{reservation.status}</Text>
@@ -51,7 +74,9 @@ const Allocation = () => {
   const renderEmptyDate = () => {
     return (
       <View style={styles.emptyDate}>
-        <Text>This is empty date!</Text>
+        <Text style={{fontSize: 18, fontWeight: '500'}}>
+          There is no Work Assigned today.
+        </Text>
       </View>
     );
   };
@@ -81,7 +106,7 @@ const Allocation = () => {
       location: '26 Benson town St,Doha 5009.',
       vehicle: 'Ashok Layland Bus - 63 seater.',
       job_type: 'Standard Inspection.',
-      date: '2024-05-16',
+      date: '2024-05-30',
       time: '3:15 PM',
       status: 'In Progress',
       mobile: 9988776655,
@@ -172,7 +197,7 @@ const Allocation = () => {
     // Add more items as needed
   ];
 
-  const assignmentsByDate = recentAssignments.reduce((acc:any, assignment) => {
+  const assignmentsByDate = recentAssignments.reduce((acc: any, assignment) => {
     const date = assignment.date;
     if (!acc[date]) {
       acc[date] = [];
@@ -181,17 +206,17 @@ const Allocation = () => {
     return acc;
   }, {});
 
-
   return (
     <View style={styles.container}>
       <Header text="Allocation" icon_name="arrow-left" />
+      {/* <Text>{currentMonth}</Text> */}
       <Agenda
         items={assignmentsByDate}
         onDayPress={date => {
           setSelectedDay(date.dateString);
         }}
         selected={selectedDay}
-        renderItem={(item)=>renderItem(item)}
+        renderItem={item => renderItem(item)}
         renderEmptyData={renderEmptyDate}
         disabledByDefault={true}
         showOnlySelectedDayItems={true}
@@ -234,7 +259,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginBottom: 20,
     borderRadius: 5,
-    marginVertical:20
+    marginVertical: 20,
   },
   dateTime: {
     backgroundColor: Colors.primary,

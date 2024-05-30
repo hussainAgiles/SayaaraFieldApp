@@ -556,15 +556,17 @@ export const inventoryStyles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: Colors.black,
+    paddingVertical:5
   },
   manufacturer: {
-    fontSize: 16,
+    fontSize: 17,
+    color: Colors.black,
   },
   price: {
     fontSize: 18,
     fontWeight: 'bold',
     color: Colors.black,
-    paddingVertical: 5,
+    padding:10
   },
   partDetails: {
     flexDirection: 'row',
@@ -581,6 +583,7 @@ export const inventoryStyles = StyleSheet.create({
   },
   stockQuantity: {
     fontSize: 16,
+    fontWeight:'bold',
     paddingVertical: 5,
   },
   hsCode: {
@@ -590,19 +593,31 @@ export const inventoryStyles = StyleSheet.create({
     paddingVertical: 5,
   },
   inventoryContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
+    alignItems:'center',
+    borderWidth:0.2
   },
   inventoryText: {
     fontSize: 16,
     fontWeight: '400',
     color: Colors.black,
+    paddingVertical:3
   },
   noDataText: {
     color: Colors.black,
     fontSize: 18,
     textAlign: 'center',
   },
+  button:{
+    width:'35%',
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center',
+    paddingVertical:10,
+    marginTop:10,
+    borderRadius:5
+  }
 });
 
 export const pendingStyles = StyleSheet.create({
@@ -739,6 +754,31 @@ export const pendingStyles = StyleSheet.create({
     textAlign: 'center',
     justifyContent:'center',
     alignItems:'center'
+  },
+})
+
+export const assignmentDetails = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.lightBg,
+  },
+  Container: {
+    backgroundColor: Colors.lightBg,
+    padding: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  Heading: {
+    fontSize: 20,
+    marginLeft: 10,
+    color: Colors.black,
+    fontWeight: 'bold',
+    fontFamily: 'Poppins-ExtraBold',
+    textAlign: 'left',
+  },
+  menuText: {
+    padding: 10,
+    fontSize: 16,
   },
 })
 

@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 6,
-    width: 160,
+    width: '45%',
     justifyContent: 'space-around',
   },
   text: {

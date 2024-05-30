@@ -1,18 +1,12 @@
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useMemo, useState } from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View
-} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useMemo, useState} from 'react';
+import {FlatList, StyleSheet, Text, TextInput, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/Header/Header';
 import Colors from '../constants/Colors';
-import { RootStackParamList } from '../navigation/Navigation';
-import { Leadsstyles, inventoryStyles } from '../styles/GlobalStyles';
+import {RootStackParamList} from '../navigation/Navigation';
+import {Leadsstyles, inventoryStyles} from '../styles/GlobalStyles';
 
 type CarPart = {
   id: number;
@@ -27,14 +21,14 @@ type CarPart = {
   qty: number;
 };
 
-type CheckoutItem = CarPart & { totalPrice: number };
+type CheckoutItem = CarPart & {totalPrice: number};
 
 interface PartsListProps {
   onCheckout: (items: CheckoutItem[]) => void;
 }
 
-const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
-
+const Inventory: React.FC<PartsListProps> = ({route}: any) => {
+  
   const initialCarParts = [
     {
       id: 1,
@@ -49,7 +43,7 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
       hs_code: 85371090,
       inventory: 'Engine Inventory',
       qty: 0,
-      part_code:'ECU-345'
+      part_code: 'ECU-345',
     },
     {
       id: 2,
@@ -64,7 +58,7 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
       hs_code: 85115000,
       inventory: 'Engine Inventory',
       qty: 0,
-      part_code:'ALT-765'
+      part_code: 'ALT-765',
     },
     {
       id: 3,
@@ -79,7 +73,7 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
       hs_code: 87083090,
       inventory: 'Brake Parts Inventory',
       qty: 0,
-      part_code:'BPD-678'
+      part_code: 'BPD-678',
     },
     {
       id: 4,
@@ -94,7 +88,7 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
       hs_code: 85111000,
       inventory: 'Plugs Inventory',
       qty: 0,
-      part_code:'SP-223'
+      part_code: 'SP-223',
     },
     {
       id: 5,
@@ -109,7 +103,7 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
       hs_code: '8413.30.90',
       inventory: 'Fuel Inventory',
       qty: 0,
-      part_code:'FPM-445'
+      part_code: 'FPM-445',
     },
     {
       id: 6,
@@ -124,7 +118,7 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
       hs_code: 84212300,
       inventory: 'Radiator & Filter',
       qty: 0,
-      part_code:'OLF-334'
+      part_code: 'OLF-334',
     },
     {
       id: 7,
@@ -139,7 +133,7 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
       hs_code: 84213100,
       inventory: 'Radiator & Filter',
       qty: 0,
-      part_code:'ARF-778'
+      part_code: 'ARF-778',
     },
     {
       id: 8,
@@ -154,7 +148,7 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
       hs_code: 87089100,
       inventory: 'Radiator & Filter',
       qty: 0,
-      part_code:'RDR-990'
+      part_code: 'RDR-990',
     },
     {
       id: 9,
@@ -169,7 +163,7 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
       hs_code: 38190000,
       inventory: 'Fluids Inventory',
       qty: 0,
-      part_code:'TRF-456'
+      part_code: 'TRF-456',
     },
     {
       id: 10,
@@ -184,10 +178,9 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
       hs_code: 87089990,
       inventory: 'Belt Inventory',
       qty: 0,
-      part_code:'TBT-887'
+      part_code: 'TBT-887',
     },
   ];
-
 
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -196,23 +189,33 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
       <View style={inventoryStyles.partContainer}>
         <View style={inventoryStyles.partHeader}>
           <View style={inventoryStyles.partHeaderTextContainer}>
-            <Text style={inventoryStyles.partName}>{partsData?.item.part_name}</Text>
-            <Text style={inventoryStyles.partNumber}>Part No : {partsData?.item.part_number}</Text>
+            <Text style={inventoryStyles.partName}>
+              {partsData?.item.part_name}
+            </Text>
+            <Text style={inventoryStyles.partNumber}>
+              Part No : {partsData?.item.part_number}
+            </Text>
           </View>
           <Text style={inventoryStyles.price}>QAR {partsData?.item.price}</Text>
         </View>
         <View style={inventoryStyles.partDetails}>
           <View style={inventoryStyles.partDetailsTextContainer}>
-          <Text style={inventoryStyles.manufacturer}>{partsData?.item.manufacturer}</Text>
-          <Text style={inventoryStyles.inventoryText}>Inventory : {partsData?.item.inventory}</Text>
+            <Text style={{fontSize: 17, paddingVertical: 3}}>
+              Short code: {partsData?.item?.part_code}
+            </Text>
+            <Text style={inventoryStyles.manufacturer}>
+              {partsData?.item.manufacturer}
+            </Text>
+            <Text style={inventoryStyles.inventoryText}>
+              Inventory : {partsData?.item.inventory}
+            </Text>
           </View>
-          <Text style={inventoryStyles.hsCode}>HS Code : {partsData?.item.hs_code}</Text>
-        </View>
-        <View style={inventoryStyles.inventoryContainer}>
-        <Text style={inventoryStyles.stockQuantity}>Qty Available: {partsData?.item.stock_quantity}</Text>
-        <Text style={{fontSize: 16, paddingVertical: 5}}>
-             Part code: {partsData?.item?.part_code}
-        </Text>
+          <View style={inventoryStyles.inventoryContainer}>
+            <Text style={{backgroundColor:Colors.lightGreish,padding:5,color:Colors.white,fontWeight:'bold',fontSize:16}}> Qty Available</Text>
+            <Text style={inventoryStyles.stockQuantity}>
+              {partsData?.item.stock_quantity}
+            </Text>
+          </View>
         </View>
       </View>
     );
@@ -234,11 +237,14 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
       const manufacturerMatches = parts?.manufacturer
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
-      return partNameMatches || manufacturerMatches;
+        const partCode = parts?.part_code
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      return partNameMatches || manufacturerMatches || partCode;
     });
   }, [initialCarParts, searchQuery]);
 
-  return ( 
+  return (
     <View style={Leadsstyles.container}>
       <Header text="Inventory" />
       <View style={inventoryStyles.searchContainer}>
@@ -268,5 +274,3 @@ const Inventory: React.FC<PartsListProps> = ({ route }: any) => {
 };
 
 export default Inventory;
-
-

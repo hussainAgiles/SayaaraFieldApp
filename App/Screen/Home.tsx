@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootStackParamList } from '../Navigation/Navigation';
 import Colors from '../constants/Colors';
 import { homeStyles } from '../styles/GlobalStyles';
+import moment from 'moment';
 
 const Home = () => {
   LogBox.ignoreAllLogs();
@@ -50,7 +51,7 @@ const Home = () => {
       location: '26 Benson town St,Doha 5009.',
       vehicle: 'Ashok Layland Bus - 63 seater.',
       job_type: 'Standard Inspection.',
-      date: '2024-05-16',
+      date: '2024-05-30',
       time: '3:15 PM',
       status: 'In Progress',
       mobile: 9988776655,
@@ -151,8 +152,9 @@ const Home = () => {
         navigation.navigate('Assignment', { assignment: data?.item })
       }}>
         <View style={homeStyles.dateTime}>
-          <Text style={homeStyles.dateText}>#{data?.item?.service_number}</Text>
-          <Text style={homeStyles.dateText}>{data?.item?.date}</Text>
+        <Text style={homeStyles.dateText}>{data?.item?.Reg_no}</Text>
+          {/* <Text style={homeStyles.dateText}>#{data?.item?.service_number}</Text> */}
+          <Text style={homeStyles.dateText}>{data?.item?.service_number}</Text>
           <Text style={homeStyles.dateText}>{data?.item?.time}</Text>
         </View>
         <View style={homeStyles.dataContainer}>
@@ -164,6 +166,13 @@ const Home = () => {
         </View>
         <View style={homeStyles.dataContainer}>
           <View>
+          <Text
+              style={{
+                fontSize: 15,
+                color: Colors.black,
+              }}>
+              {moment(data?.item?.date).format('YYYY MMM DD')}
+            </Text>
             <Text>{data?.item?.vehicle}</Text>
             <Text>{data?.item?.job_type}</Text>
           </View>
@@ -268,7 +277,7 @@ const Home = () => {
         </View>
         <View style={homeStyles.assignmentList}>
           <FlatList data={filterTodayAssignments(recentAssignments)} renderItem={renderAssignments} ListEmptyComponent={
-            <Text style={homeStyles.noDataText}>No data found.</Text>
+            <Text style={homeStyles.noDataText}>No Assignments for today.</Text>
           } />
         </View>
       </View>

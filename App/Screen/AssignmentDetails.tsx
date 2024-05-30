@@ -6,6 +6,7 @@ import {
   Alert,
   FlatList,
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -23,6 +24,7 @@ import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '../constants/Colors';
 import { RootStackParamList } from '../navigation/Navigation';
+import { assignmentDetails } from '../styles/GlobalStyles';
 
 type AssignmentDetailsProps = {
   extraData: any;
@@ -38,12 +40,10 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
   extraData,
 }: any) => {
   const assignmentData = extraData || route?.params?.data;
-  // console.log("Recieved props === ",assignmentData)
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [workRecords, setWorkRecords] = useState([]);
   const [checkoutData, setCheckoutData] = useState<Checkout[]>([]);
 
-  // console.log("Record ===",WorkRecords);
 
   const handleMenuSelect = (value: any) => {
     switch (value) {
@@ -160,13 +160,13 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
 
   return (
     <MenuProvider>
-      <View style={styles.container}>
-        <View style={styles.Container}>
+      <View style={assignmentDetails.container}>
+        <View style={assignmentDetails.Container}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Icon name={'arrow-left'} color={Colors.black} size={28} />
             </TouchableOpacity>
-            <Text style={styles.Heading}>
+            <Text style={assignmentDetails.Heading}>
               {' '}
               #{assignmentData?.service_number}
             </Text>
@@ -207,7 +207,7 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
               </MenuTrigger>
               <MenuOptions>
                 <MenuOption onSelect={() => handleMenuSelect('documents')}>
-                  <Text style={styles.menuText}>Vehicle Details</Text>
+                  <Text style={assignmentDetails.menuText}>Vehicle Details</Text>
                 </MenuOption>
               </MenuOptions>
             </Menu>
@@ -302,16 +302,20 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
                     paddingVertical: 3,
                   }}>
                   {assignmentData?.customer}
-                </Text>
-                <Text>{assignmentData?.mobile}</Text>
+                </Text >
+                <Text style={{
+                    fontSize: 15,
+                    color: Colors.black,
+                    paddingVertical: 3,
+                  }}>{assignmentData?.mobile}</Text>
               </View>
-              <Icon name="phone" size={25} color={Colors.primary} />
+              <Icon name="phone" size={25} color={Colors.primary} onPress={()=>Linking.openURL(`tel:${assignmentData?.mobile}`)}/>
             </View>
             {/* Location */}
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Icon name="map-marker" size={25} color={Colors.primary} />
               <Text
-                style={{color: Colors.black, fontWeight: '500', marginLeft: 5}}>
+                style={{color: Colors.black, fontWeight: '500', marginLeft: 5, fontSize: 15,}}>
                 {assignmentData?.location}
               </Text>
             </View>
@@ -329,6 +333,7 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
                     color: Colors.black,
                     fontWeight: '500',
                     marginLeft: 5,
+                    fontSize: 15,
                   }}>
                   {assignmentData?.date}
                 </Text>
@@ -339,6 +344,7 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
                   alignItems: 'center',
                   paddingVertical: 7,
                   marginLeft: 25,
+
                 }}>
                 <Icon name="clock" size={25} color={Colors.primary} />
                 <Text
@@ -346,6 +352,7 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
                     color: Colors.black,
                     fontWeight: '500',
                     marginLeft: 5,
+                    fontSize: 15,
                   }}>
                   {assignmentData?.time}
                 </Text>
@@ -395,23 +402,27 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
                 <Text
                   style={{
                     color: Colors.black,
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: '500',
                   }}>
                   Registration Number
                 </Text>
-                <Text>{assignmentData.Reg_no}</Text>
+                <Text style={{
+                  fontSize: 15,
+                }}>{assignmentData.Reg_no}</Text>
               </View>
               <View style={{flexDirection: 'column', paddingHorizontal: 10}}>
                 <Text
                   style={{
                     color: Colors.black,
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: '500',
                   }}>
                   VIN
                 </Text>
-                <Text>{assignmentData.Vin}</Text>
+                <Text style={{
+                  fontSize: 15,
+                }}>{assignmentData.Vin}</Text>
               </View>
             </View>
             <View style={{flexDirection: 'row', marginTop: 10}}>
@@ -419,7 +430,7 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
                 <Text
                   style={{
                     color: Colors.black,
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: '500',
                   }}>
                   Last Service
@@ -429,18 +440,19 @@ const AssignmentDetails: React.FC<AssignmentDetailsProps> = ({
               <View
                 style={{
                   flexDirection: 'column',
-                  paddingHorizontal: 10,
                   marginLeft: '35%',
                 }}>
                 <Text
                   style={{
                     color: Colors.black,
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: '500',
                   }}>
                   Last Visit KM’s
                 </Text>
-                <Text>75876</Text>
+                <Text style={{
+                  fontSize: 15,
+                }}>75876</Text>
               </View>
             </View>
           </View>

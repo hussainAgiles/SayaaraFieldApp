@@ -1,18 +1,18 @@
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useEffect, useMemo, useState } from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   FlatList,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '../../constants/Colors';
-import { RootStackParamList } from '../../navigation/Navigation';
-import { Leadsstyles } from '../../styles/GlobalStyles';
+import {RootStackParamList} from '../../navigation/Navigation';
+import {Leadsstyles} from '../../styles/GlobalStyles';
 import Header from '../Header/Header';
 
 type CarPart = {
@@ -27,27 +27,19 @@ type CarPart = {
   hs_code: string | number;
   inventory: string;
   qty: number;
+  part_code: string;
 };
 
-type CheckoutItem = CarPart & { totalPrice: number };
+type CheckoutItem = CarPart & {totalPrice: number};
 
 interface PartsListProps {
   onCheckout: (items: CheckoutItem[]) => void;
 }
 
-const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
-  const { data, onUpdateCheckoutItems } = route.params;
+const PartsStockList: React.FC<PartsListProps> = ({route}: any) => {
+  const {data, onUpdateCheckoutItems} = route.params;
+  console.log("updated items on call back == ",onUpdateCheckoutItems)
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const partsCategory = [
-    {id: 1, category: 'Alignment and Balancing'},
-    {id: 2, category: 'Ceramic Coating'},
-    {id: 3, category: 'Car Renewal System'},
-    {id: 4, category: 'Braking System'},
-    {id: 5, category: 'Electrical System'},
-    {id: 6, category: 'Exterior Body Parts'},
-    {id: 7, category: 'Interior Components'},
-    {id: 8, category: 'Wheels and Tires'},
-  ];
 
   const cartType = [
     {id: 1, car_name: 'Toyota', variant: 'Camry', car_number: 'ABC1234'},
@@ -77,10 +69,11 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
       stock_quantity: 10, // Out of stock
       description:
         "The Engine Control Unit (ECU) is a crucial component responsible for managing the engine's performance. This Bosch ECU ensures optimal engine functioning and efficiency.",
-      image: require('../../assets/Images/PartsImages/ECU.jpeg'),
+      // image: require('../../assets/Images/PartsImages/ECU.jpeg'),
       hs_code: 85371090,
       inventory: 'Engine Inventory',
       qty: 0,
+      part_code: 'ECU-345',
     },
     {
       id: 2,
@@ -91,10 +84,11 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
       stock_quantity: 25,
       description:
         'The alternator plays a vital role in charging the battery and providing power to the electrical system. This Denso alternator is known for its reliability and consistent performance.',
-      image: require('../../assets/Images/PartsImages/Alterntor.jpg'),
+      // image: require('../../assets/Images/PartsImages/Alterntor.jpg'),
       hs_code: 85115000,
       inventory: 'Engine Inventory',
       qty: 0,
+      part_code: 'ALT-765',
     },
     {
       id: 3,
@@ -105,10 +99,11 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
       stock_quantity: 10, // Out of stock
       description:
         'The brake pad set by Brembo offers exceptional braking performance and durability. Designed to withstand high temperatures and provide consistent stopping power.',
-      image: require('../../assets/Images/PartsImages/BrakePad.png'),
+      // image: require('../../assets/Images/PartsImages/BrakePad.png'),
       hs_code: 87083090,
       inventory: 'Brake Parts Inventory',
       qty: 0,
+      part_code: 'BPD-678',
     },
     {
       id: 4,
@@ -119,10 +114,11 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
       stock_quantity: 0,
       description:
         'NGK Spark Plugs are engineered to deliver exceptional ignition performance in all conditions. Ensure smooth engine operation with these high-quality spark plugs.',
-      image: require('../../assets/Images/PartsImages/Sparkplug.png'),
+      // image: require('../../assets/Images/PartsImages/Sparkplug.png'),
       hs_code: 85111000,
       inventory: 'Plugs Inventory',
       qty: 0,
+      part_code: 'SP-223',
     },
     {
       id: 5,
@@ -133,10 +129,11 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
       stock_quantity: 10, // Out of stock
       description:
         'The Walbro Fuel Pump delivers a consistent flow of fuel to the engine, ensuring optimal performance and fuel efficiency. Trusted by enthusiasts and professionals alike.',
-      image: require('../../assets/Images/PartsImages/FuelPump.png'),
+      // image: require('../../assets/Images/PartsImages/FuelPump.png'),
       hs_code: '8413.30.90',
       inventory: 'Fuel Inventory',
       qty: 0,
+      part_code: 'FPM-445',
     },
     {
       id: 6,
@@ -147,10 +144,11 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
       stock_quantity: 30,
       description:
         'Mann-Filter Oil Filters provide superior filtration efficiency, protecting your engine from harmful contaminants. Maintain engine health and prolong its lifespan with these premium filters.',
-      image: require('../../assets/Images/PartsImages/carFilter.png'),
+      // image: require('../../assets/Images/PartsImages/carFilter.png'),
       hs_code: 84212300,
       inventory: 'Radiator & Filter',
       qty: 0,
+      part_code: 'OLF-334',
     },
     {
       id: 7,
@@ -161,10 +159,10 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
       stock_quantity: 0,
       description:
         "K&N Air Filters are designed to increase horsepower and acceleration while providing excellent filtration. Enhance your engine's performance and protect it from harmful particles.",
-      image: require('../../assets/Images/PartsImages/AirFilter.png'),
       hs_code: 84213100,
       inventory: 'Radiator & Filter',
       qty: 0,
+      part_code: 'ARF-778',
     },
     {
       id: 8,
@@ -175,10 +173,10 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
       stock_quantity: 10, // Out of stock
       description:
         'The Behr Radiator efficiently dissipates heat generated by the engine, ensuring optimal operating temperatures. Constructed with high-quality materials for durability and reliability.',
-      image: require('../../assets/Images/PartsImages/Raditor.jpg'),
       hs_code: 87089100,
       inventory: 'Radiator & Filter',
       qty: 0,
+      part_code: 'RDR-990',
     },
     {
       id: 9,
@@ -189,10 +187,11 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
       stock_quantity: 45,
       description:
         'Valvoline Transmission Fluid is formulated to provide smooth shifting and reliable performance in automatic transmissions. Protect your transmission with this high-quality fluid.',
-      image: require('../../assets/Images/PartsImages/Transmision.png'),
+      // image: require('../../assets/Images/PartsImages/Transmision.png'),
       hs_code: 38190000,
       inventory: 'Fluids Inventory',
       qty: 0,
+      part_code: 'TRF-456',
     },
     {
       id: 10,
@@ -203,17 +202,19 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
       stock_quantity: 30,
       description:
         'The Gates Timing Belt ensures precise synchronization of engine components, preventing costly damage from timing belt failure. Trust Gates for reliable timing belt solutions.',
-      image: require('../../assets/Images/PartsImages/timing.png'),
+      // image: require('../../assets/Images/PartsImages/timing.png'),
       hs_code: 87089990,
       inventory: 'Belt Inventory',
       qty: 0,
+      part_code: 'TBT-887',
     },
   ];
 
   const [searchQuery, setSearchQuery] = useState('');
   const [carParts, setCarParts] = useState<CarPart[]>(initialCarParts);
-  const [showQuantity, setShowQuantity] = useState<{ [key: number]: boolean }>({});
-
+  const [showQuantity, setShowQuantity] = useState<{[key: number]: boolean}>(
+    {},
+  );
 
   const renderParts = (partsData: any) => {
     return (
@@ -237,8 +238,17 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
               }}>
               {partsData?.item.part_name}
             </Text>
-            <Text style={{fontSize: 16, paddingVertical: 5}}>
-              {partsData?.item.manufacturer}
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: '400',
+                color: Colors.black,
+                paddingVertical: 5,
+              }}>
+              Part No : {partsData?.item.part_number}
+            </Text>
+            <Text style={{fontSize: 16, paddingBottom: 3}}>
+              Short code : {partsData?.item?.part_code}
             </Text>
           </View>
           <Text
@@ -260,10 +270,7 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
                 fontWeight: '400',
                 color: Colors.black,
               }}>
-              Part No : {partsData?.item.part_number}
-            </Text>
-            <Text style={{fontSize: 16, paddingVertical: 5}}>
-              Qty Available: {partsData?.item.stock_quantity}
+              Inventory : {partsData?.item.inventory}
             </Text>
           </View>
           <Text
@@ -277,87 +284,89 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
           </Text>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '400',
-              color: Colors.black,
-            }}>
-            Inventory : {partsData?.item.inventory}
+          <Text style={{fontSize: 16}}>
+            Qty Available: {partsData?.item.stock_quantity}
           </Text>
-
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            {partsData?.item.stock_quantity === 0 ? (<TouchableOpacity onPress={()=> handleRequestPart(partsData?.item.id)}
-              style={{
-                backgroundColor: Colors.red,
-                paddingVertical: 7,
-                paddingHorizontal: 15,
-                borderRadius: 5,
-              }}>
-              <Text style={{color: Colors.Iconwhite}}>Request Part</Text>
-            </TouchableOpacity>): partsData?.item.qty === 0 && !showQuantity[partsData?.item.id] ? (<TouchableOpacity onPress={()=>handleAdd(partsData?.item?.id)}
-              style={{
-                backgroundColor: Colors.primary,
-                paddingVertical: 7,
-                paddingHorizontal: 15,
-                borderRadius: 5,
-              }}>
-              <Text style={{color: Colors.Iconwhite}}>Add</Text>
-            </TouchableOpacity>) :(
-            <View style={{flexDirection: 'row'}}>
+            {partsData?.item.stock_quantity === 0 ? (
               <TouchableOpacity
+                onPress={() => handleRequestPart(partsData?.item.id)}
                 style={{
-                  width: 25,
-                  borderWidth: 0.7,
-                  height: 30,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: Colors.primary,
-                }}
-                onPress={() => handleDecrement(partsData?.item.id)}
-                disabled={partsData?.item.qty === 0}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    alignItems: 'center',
-                    fontSize: 20,
-                    color: Colors.Iconwhite,
-                  }}>
-                  -
-                </Text>
-              </TouchableOpacity>
-              <View
-                style={{
-                  width: 30,
-                  height: 30,
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  backgroundColor: Colors.red,
+                  paddingVertical: 7,
+                  paddingHorizontal: 15,
+                  borderRadius: 5,
                 }}>
-                <Text style={{textAlign: 'center', fontSize: 20}}>
-                  {partsData?.item.qty}
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={{
-                  width: 25,
-                  borderWidth: 0.7,
-                  height: 30,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: Colors.primary,
-                }}
-                onPress={() => handleIncrement(partsData?.item.id)}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    alignItems: 'center',
-                    fontSize: 20,
-                    color: Colors.Iconwhite,
-                  }}>
-                  +
-                </Text>
+                <Text style={{color: Colors.Iconwhite}}>Request Part</Text>
               </TouchableOpacity>
-            </View>) }
+            ) : partsData?.item.qty === 0 &&
+              !showQuantity[partsData?.item.id] ? (
+              <TouchableOpacity
+                onPress={() => handleAdd(partsData?.item?.id)}
+                style={{
+                  backgroundColor: Colors.primary,
+                  paddingVertical: 7,
+                  paddingHorizontal: 15,
+                  borderRadius: 5,
+                }}>
+                <Text style={{color: Colors.Iconwhite}}>Add</Text>
+              </TouchableOpacity>
+            ) : (
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  style={{
+                    width: 25,
+                    borderWidth: 0.7,
+                    height: 30,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: Colors.primary,
+                  }}
+                  onPress={() => handleDecrement(partsData?.item.id)}
+                  disabled={partsData?.item.qty === 0}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      alignItems: 'center',
+                      fontSize: 20,
+                      color: Colors.Iconwhite,
+                    }}>
+                    -
+                  </Text>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    width: 30,
+                    height: 30,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={{textAlign: 'center', fontSize: 20}}>
+                    {partsData?.item?.qty}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  style={{
+                    width: 25,
+                    borderWidth: 0.7,
+                    height: 30,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: Colors.primary,
+                  }}
+                  onPress={() => handleIncrement(partsData?.item.id)}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      alignItems: 'center',
+                      fontSize: 20,
+                      color: Colors.Iconwhite,
+                    }}>
+                    +
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </View>
       </View>
@@ -369,8 +378,8 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
     // Implement the request part functionality here
   };
 
-  const handleAdd = (id:any) => {
-    setShowQuantity((prevState) => ({ ...prevState, [id]: true }));
+  const handleAdd = (id: any) => {
+    setShowQuantity(prevState => ({...prevState, [id]: true}));
     handleIncrement(id); // Initial increment when "Add" is pressed
   };
 
@@ -419,7 +428,10 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
       const manufacturerMatches = parts?.manufacturer
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
-      return partNameMatches || manufacturerMatches;
+      const partCodeMatches = parts?.part_code
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      return partNameMatches || manufacturerMatches || partCodeMatches;
     });
   }, [carParts, searchQuery]);
 
@@ -428,12 +440,16 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
       id: item.id,
       qty: item.qty,
       price: item.price,
-      item_name: item.part_name
+      item_name: item.part_name,
+      short_code: item.part_code,
+      manufacturer:item.manufacturer,
+      inventory:item.inventory,
+      partnumber:item.part_number
     }));
     onUpdateCheckoutItems(checkoutData);
-    navigation.navigate('PartsListing',{
-      data:data
-    })
+    navigation.navigate('PartsListing', {
+      data: data,
+    });
   };
 
   // console.log(filteredPartDetails)
@@ -469,7 +485,9 @@ const PartsStockList : React.FC<PartsListProps> = ({route}:any) => {
             <Text style={styles.noDataText}>No data found.</Text>
           }
         />
-        <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckoutClick}>
+        <TouchableOpacity
+          style={styles.checkoutButton}
+          onPress={handleCheckoutClick}>
           <Text style={styles.checkoutButtonText}>Checkout</Text>
         </TouchableOpacity>
       </View>
@@ -507,14 +525,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
   },
-  checkoutButton:{
-    backgroundColor:Colors.green,
-    alignItems:'center',
-    padding:12,
-    borderRadius:10,
-    
+  checkoutButton: {
+    backgroundColor: Colors.green,
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 10,
   },
-  checkoutButtonText:{
-    color:Colors.white
-  }
+  checkoutButtonText: {
+    color: Colors.white,
+  },
 });
